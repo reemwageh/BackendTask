@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="reem">
+        <createTable tableName="UserType">
+            <column name="type_id" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type_name" type="varchar(255)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="reem">
+        <createTable tableName="User">
+            <column name="user_id" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="first_name" type="varchar(255)" />
+            <column name="last_name" type="varchar(255)" />
+            <column name="phone_no" type="varchar(255)" />
+            <column name="password" type="varchar(255)" />
+            <column name="address" type="varchar(255)" />
+            <column name="email" type="varchar(255)" />
+            <column name="user_type" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseColumnNames="user_type"
+                baseTableName="User"
+                constraintName="fk_user_usertype"
+                referencedColumnNames="type_id"
+                referencedTableName="UserType" />
+    </changeSet>
+
+
+    <changeSet id="3" author="reem">
+        <createTable tableName="Shipping">
+            <column name="shipping_Id" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="city" type="varchar(255)" />
+            <column name="price" type="int" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="reem">
+        <createTable tableName="Product">
+            <column name="productId" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="productName" type="varchar(255)" />
+            <column name="price" type="float">
+                <constraints nullable="false" />
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="reem">
+        <createTable tableName="Orders">
+            <column name="orderId" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="totalPrice" type="float" />
+            <column name="date" type="date" />
+            <column name="orderuser" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="ordershipping" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseColumnNames="orderuser"
+                baseTableName="Orders"
+                constraintName="fk_order_user"
+                referencedColumnNames="user_id"
+                referencedTableName="User" />
+        <addForeignKeyConstraint
+                baseColumnNames="ordershipping"
+                baseTableName="Orders"
+                constraintName="fk_order_shipping"
+                referencedColumnNames="shipping_Id"
+                referencedTableName="Shipping" />
+    </changeSet>
+
+
+    <changeSet id="6" author="reem">
+        <createTable tableName="productorder">
+            <column name="oid" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="pid" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseColumnNames="oid"
+                baseTableName="productorder"
+                constraintName="fk_productorder_order"
+                referencedColumnNames="orderId"
+                referencedTableName="Orders" />
+        <addForeignKeyConstraint
+                baseColumnNames="pid"
+                baseTableName="productorder"
+                constraintName="fk_productorder_product"
+                referencedColumnNames="productId"
+                referencedTableName="Product" />
+    </changeSet>
+</databaseChangeLog>
