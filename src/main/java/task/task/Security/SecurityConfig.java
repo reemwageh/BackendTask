@@ -49,9 +49,9 @@ public class SecurityConfig {
                         "/swagger-ui/**",
                         "/webjars/**",
                         "/swagger-ui.html").permitAll()
-                .requestMatchers("/users/creates").permitAll()
-                .requestMatchers("/create/userType").permitAll()
-                .requestMatchers("/login").permitAll()
+                .requestMatchers("/usertypes").permitAll()
+                .requestMatchers("/users").permitAll()
+                .requestMatchers("/users/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
