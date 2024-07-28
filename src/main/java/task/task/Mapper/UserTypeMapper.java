@@ -13,7 +13,5 @@ public interface UserTypeMapper {
 
     UserTypeDTO toDTO(UserType userType);
 
-    UserTypeDTO toDTO(Optional<UserType> userType);
-
     UserType toEntity(UserTypeDTO userTypeDTO);
 }
