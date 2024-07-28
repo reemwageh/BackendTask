@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import task.task.DTO.UserDTO;
 import task.task.Entity.User;
+import task.task.Expectation.UserNotAuthorizedException;
 import task.task.Repository.UserRepository;
 
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent())
             return user.get();
-        throw new RuntimeException("User is not authorized");
+
+        throw new UserNotAuthorizedException("User is not authorized");
     }
 }

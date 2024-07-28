@@ -13,6 +13,7 @@ import task.task.DTO.LoginResponse;
 import task.task.DTO.UserDTO;
 import task.task.Entity.User;
 import task.task.Entity.UserType;
+import task.task.Expectation.EmailAlreadyExistsException;
 import task.task.Mapper.UserMapper;
 import task.task.Repository.UserRepository;
 import task.task.Repository.UserTypeRepository;
@@ -38,7 +39,7 @@ public class UserServiceImp implements UserService {
     @Override
     public UserDTO addNewUser(UserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists: " + userDTO.getEmail());
         }
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         Optional<UserType> optionalUserType = userTypeRepository.findById(userDTO.getUser_type().getTypeId());

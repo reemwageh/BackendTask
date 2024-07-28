@@ -19,6 +19,7 @@ import task.task.Repository.OrderRepository;
 import task.task.Repository.ProductRepository;
 import task.task.Repository.ShippingRepository;
 import task.task.Security.JwtService;
+import task.task.Service.OrderFulfillmentService;
 import task.task.Service.OrderServiceImp;
 
 import java.util.Arrays;
@@ -48,6 +49,9 @@ public class OrderJunitTest {
     @Mock
     private OrderMapper orderMapper;
 
+    @Mock
+    private OrderFulfillmentService orderFulfillmentService;
+
     @InjectMocks
     private OrderServiceImp orderService;
 
@@ -58,6 +62,8 @@ public class OrderJunitTest {
     private Product product;
     private User user;
     private Shipping shipping;
+
+
 
     @BeforeEach
     void setUp() {
@@ -116,9 +122,15 @@ public class OrderJunitTest {
         when(orderMapper.orderToOrderDTO(any(Order.class))).thenReturn(orderDTO);
 
         OrderDTO result = orderService.createNewOrder(orderDTO);
+
         assertNotNull(result);
         assertNotNull(result.getOrderUser());
         assertEquals(orderDTO.getOrderUser().getEmail(), result.getOrderUser().getEmail());
+
+        verify(shippingRepository, times(1)).findById(anyInt());
+        verify(productRepository, times(1)).findById(anyInt());
+        verify(orderRepository, times(1)).save(any(Order.class));
+        verify(orderFulfillmentService, times(1)).fulfillOrder(any(Order.class));
     }
 
     @Test

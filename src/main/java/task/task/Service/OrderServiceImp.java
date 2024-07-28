@@ -7,6 +7,8 @@ import task.task.DTO.OrderDTO;
 import task.task.Entity.Order;
 import task.task.Entity.Product;
 import task.task.Entity.User;
+import task.task.Expectation.DuplicateProductException;
+import task.task.Expectation.OrderCreationException;
 import task.task.Mapper.OrderMapper;
 import task.task.Repository.OrderRepository;
 import task.task.Repository.ProductRepository;
@@ -14,6 +16,7 @@ import task.task.Repository.ShippingRepository;
 import task.task.Security.JwtService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImp implements OrderService {
@@ -27,7 +30,9 @@ public class OrderServiceImp implements OrderService {
     @Autowired
     JwtService jwtService;
     @Autowired
-    OrderMapper orderMapper; // Use MapStruct mapper
+    OrderMapper orderMapper;
+    @Autowired
+    OrderFulfillmentService orderFulfillmentService;
 
     private float calculateTotalPrice(Order order) {
         float totalPrice = 0;
@@ -50,31 +55,35 @@ public class OrderServiceImp implements OrderService {
     }
 
     private List<Product> checkUniqueProducts(Order order) {
-        Set<Integer> productIds = new HashSet<>();
-        List<Product> uniqueProducts = new ArrayList<>();
-
+        Set<String> productNames = new HashSet<>();
         for (Product product : order.getProducts()) {
-            if (!productIds.add(product.getProductId())) {
-                throw new IllegalArgumentException("Duplicate product found in the order: " + product.getProductName());
+            if (!productNames.add(product.getProductName())) {
+                throw new DuplicateProductException("The same product should not be found in the same order twice ");
             }
-            Product fullProduct = productRepository.findById(product.getProductId()).orElseThrow();
-            uniqueProducts.add(fullProduct);
         }
-
-        return uniqueProducts;
+        return order.getProducts().stream().distinct().collect(Collectors.toList());
     }
+
 
     @Override
     public OrderDTO createNewOrder(OrderDTO orderDTO) {
-        Order order = orderMapper.orderDTOToOrder(orderDTO);
-        order.setOrderShipping(shippingRepository.findById(order.getOrderShipping().getShippingID()).orElseThrow());
-        order.setOrderUser(orderMapper.userDTOToUser(orderDTO.getOrderUser()));
-        List<Product> uniqueProducts = checkUniqueProducts(order);
-        order.setProducts(uniqueProducts);
-        float totalPrice = calculateTotalPrice(order);
-        order.setTotalPrice(totalPrice);
-        updateProductQuantity(order);
-        return orderMapper.orderToOrderDTO(orderRepository.save(order));
+        try {
+            Order order = orderMapper.orderDTOToOrder(orderDTO);
+            order.setOrderShipping(shippingRepository.findById(order.getOrderShipping().getShippingID()).orElseThrow());
+            order.setOrderUser(orderMapper.userDTOToUser(orderDTO.getOrderUser()));
+            List<Product> uniqueProducts = checkUniqueProducts(order);
+            order.setProducts(uniqueProducts);
+            float totalPrice = calculateTotalPrice(order);
+            order.setTotalPrice(totalPrice);
+            updateProductQuantity(order);
+            Order savedOrder = orderRepository.save(order);
+            orderFulfillmentService.fulfillOrder(savedOrder);
+            return orderMapper.orderToOrderDTO(savedOrder);
+        } catch (DuplicateProductException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new OrderCreationException("Failed to create order: " + e.getMessage());
+        }
     }
 
     @Override

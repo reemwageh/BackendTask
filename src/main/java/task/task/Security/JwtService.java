@@ -1,6 +1,7 @@
 package task.task.Security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import task.task.DTO.UserDTO;
 import task.task.Entity.User;
+import task.task.Expectation.InvalidTokenException;
+import task.task.Expectation.TokenExpiredException;
 
 import java.security.Key;
 import java.util.Base64;
@@ -39,7 +42,10 @@ public class JwtService {
 
     public boolean isTokenValid(String token , UserDetails userDetails){
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        if (!username.equals(userDetails.getUsername()) || isTokenExpired(token)) {
+            throw new InvalidTokenException("Token is expired or invalid");
+        }
+        return true;
     }
 
     private boolean isTokenExpired(String token) {
@@ -55,10 +61,14 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
     private Claims extractAllClaims(String token){
+        try{
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
+    } catch (ExpiredJwtException e){
+            throw new TokenExpiredException("Token is expired");
+        }
     }
 
     private static Key getSignKeyIn() {
