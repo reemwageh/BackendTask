@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @Tag(name = "Shipping Management")
+@RequestMapping("/shippings")
 public class ShippingController {
 
     @Autowired
@@ -23,7 +24,7 @@ public class ShippingController {
             summary = "This endpoint is used to Add a new Shipping"
     )
 
-    @PostMapping("/create/Shipping")
+    @PostMapping
     public ShippingDTO addNewShipping(@RequestBody ShippingDTO shippingDTO) {
         return shippingService.addNewShipping(shippingDTO);
     }
@@ -33,7 +34,7 @@ public class ShippingController {
             summary = "This endpoint is used to get Shipping by ID"
     )
 
-    @GetMapping("/get/Shipping/{shippingId}")
+    @GetMapping("/{shippingId}")
     public Optional<ShippingDTO> getShippingById(@PathVariable("shippingId") int shippingId) {
         return shippingService.getShippingById(shippingId);
     }

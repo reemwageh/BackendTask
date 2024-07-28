@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Tag(name = "UserType Management")
+@RequestMapping("/usertypes")
 public class UserTypeController {
 
     @Autowired
@@ -26,7 +27,7 @@ public class UserTypeController {
             description = "Post endpoint for UserType",
             summary = "This endpoint is used to Add new UserType"
     )
-    @PostMapping("/create/userType")
+    @PostMapping
     public UserTypeDTO addNewUserType(@RequestBody UserTypeDTO userTypeDTO) {
         return userTypeService.createUserType(userTypeDTO);
     }
@@ -35,7 +36,7 @@ public class UserTypeController {
             description = "Get endpoint for All UserType",
             summary = "This endpoint is used to get all UserType stored in db"
     )
-    @GetMapping("/get/userType/all")
+    @GetMapping
     public List<UserTypeDTO> userTypeList() {
         return userTypeService.fetchAllUserTypes();
     }
@@ -44,7 +45,7 @@ public class UserTypeController {
             description = "Get endpoint for UserType By ID",
             summary = "This endpoint is used to get UserType by ID"
     )
-    @GetMapping("/get/userType/{typeId}")
+    @GetMapping("/{typeId}")
     public UserTypeDTO getUserById(@PathVariable("typeId") int typeId){
         return userTypeService.getUserTypeById(typeId);
     }

@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @Tag(name = "Product Management")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class ProductController {
             description = "Post endpoint for Product",
             summary = "This endpoint is used to create a new Product"
     )
-    @PostMapping("/products")
+    @PostMapping
     public ProductDTO addNewProduct(@RequestBody ProductDTO productDTO) {
         return productService.  createNewProduct(productDTO);
     }
@@ -34,7 +35,7 @@ public class ProductController {
             summary = "This endpoint is used to get all the products stored in db "
     )
 
-    @GetMapping("/products/all")
+    @GetMapping
     public List<ProductDTO> getAllProducts() {
         return productService.fetchAllProducts();
     }
@@ -45,7 +46,7 @@ public class ProductController {
             summary = "This endpoint is used to get product by ID"
     )
 
-    @GetMapping("/get/products/{productId}")
+    @GetMapping("/{productId}")
     public Optional<ProductDTO> getProductById(@PathVariable("productId") int productId) {
         return productService.getProductById(productId);
     }
@@ -55,7 +56,7 @@ public class ProductController {
             description = "Put endpoint for Product",
             summary = "This endpoint is used to Update Product details"
     )
-    @PutMapping("/update/products/{productId}")
+    @PutMapping("/{productId}")
     public ProductDTO updateProduct(@PathVariable("productId") int productId, @RequestBody ProductDTO productDTO) {
         return productService.updateProduct(productId, productDTO);
     }
@@ -64,7 +65,7 @@ public class ProductController {
             description = "Delete endpoint for Product",
             summary = "This endpoint is used to Delete product by id"
     )
-    @DeleteMapping("/delete/products/{productId}")
+    @DeleteMapping("/{productId}")
     public boolean deleteProduct(@PathVariable("productId") int productId) {
         return productService.deleteProduct(productId);
     }

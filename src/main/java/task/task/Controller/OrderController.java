@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @Tag(name = "Order Management")
+@RequestMapping("/orders")
 public class OrderController {
     @Autowired
     OrderService orderService;
@@ -26,7 +27,7 @@ public class OrderController {
             summary = "This endpoint is used to create a new Order"
     )
 
-    @PostMapping("/orders/create")
+    @PostMapping
     public OrderDTO addNewOrder(@RequestBody OrderDTO orderDTO) {
         return orderService.createNewOrder(orderDTO);
     }
@@ -36,7 +37,7 @@ public class OrderController {
     )
 
 
-    @GetMapping("/orders/all")
+    @GetMapping
     public List<OrderDTO> getAllOrder() {
         return orderService.fetchAllOrder();
     }
@@ -45,7 +46,7 @@ public class OrderController {
             description = "Get endpoint for Order",
             summary = "This endpoint is used to get Order by Id"
     )
-    @GetMapping("/get/orders/{orderId}")
+    @GetMapping("/{orderId}")
     public Optional<OrderDTO> getOrderById(@PathVariable("orderId") int orderId) {
         return orderService.getOrderById(orderId);
     }
@@ -55,7 +56,7 @@ public class OrderController {
             summary = "This endpoint is used to delete order by ID"
     )
 
-    @DeleteMapping("/delete/orders/{orderId}")
+    @DeleteMapping("/{orderId}")
     public boolean deleteOrder(@PathVariable("orderId") int orderId) {
         return orderService.deleteOrder(orderId);
     }

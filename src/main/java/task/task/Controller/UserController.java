@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @Tag(name = "User Management")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -29,7 +30,7 @@ public class UserController {
             summary = "This endpoint is used to Add new User"
     )
 
-    @PostMapping("/users/creates")
+    @PostMapping
     public UserDTO addNewUser(@RequestBody UserDTO userDTO) {
         return userService.addNewUser(userDTO);
     }
@@ -47,7 +48,7 @@ public class UserController {
             description = "Get endpoint for All Users",
             summary = "This endpoint is used to get all the Users stored in db "
     )
-    @GetMapping("/users/all")
+    @GetMapping
     public List<UserDTO> getAllUser() {
         return userService.fetchAllUsers();
     }
@@ -58,7 +59,7 @@ public class UserController {
             summary = "This endpoint is used to get User by Id "
     )
 
-    @GetMapping("/get/users/{userId}")
+    @GetMapping("/{userId}")
     public Optional<UserDTO> getUserById(@PathVariable("userId") int userId) {
         return userService.getUserById(userId);
     }
@@ -67,7 +68,7 @@ public class UserController {
             description = "Delete endpoint for User",
             summary = "This endpoint is used to delete user by Id"
     )
-    @DeleteMapping("/delete/users/{userId}")
+    @DeleteMapping("/{userId}")
     public boolean deleteUser(@PathVariable("userId") int userId) {
         return userService.deleteUser(userId);
     }
