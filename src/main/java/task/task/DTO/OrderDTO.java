@@ -17,4 +17,7 @@ public class OrderDTO {
     private UserDTO orderUser;
     private ShippingDTO orderShipping;
     private List<ProductDTO> products;
+
+    public OrderDTO(int i, String order1, String description1, double v, String date) {
+    }
 }

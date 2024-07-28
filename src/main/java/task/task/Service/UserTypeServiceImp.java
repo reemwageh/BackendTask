@@ -38,7 +38,7 @@ public class UserTypeServiceImp implements UserTypeService{
     public UserTypeDTO getUserTypeById(int typeId) {
         return userTypeRepository.findById(typeId)
                 .map(userTypeMapper::toDTO)
-                .orElse(null); // or throw an exception if preferred
+                .orElse(null);
     }
 }
 

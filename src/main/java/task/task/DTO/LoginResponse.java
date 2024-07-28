@@ -11,4 +11,8 @@ public class LoginResponse {
     private String email;
     private String token;
     private int typeID;
+
+    public LoginResponse(String token) {
+        this.token = token;
+    }
 }

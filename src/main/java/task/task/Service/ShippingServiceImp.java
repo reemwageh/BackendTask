@@ -15,7 +15,7 @@ public class ShippingServiceImp implements ShippingService {
     @Autowired
     private ShippingRepository shippingRepository;
     @Autowired
-    ShippingMapper shippingMapper; // Use MapStruct mapper
+    ShippingMapper shippingMapper;
 
     @Override
     public ShippingDTO addNewShipping(ShippingDTO shippingDTO) {

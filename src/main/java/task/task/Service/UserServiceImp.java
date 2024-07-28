@@ -33,7 +33,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserMapper userMapper; // Use MapStruct mapper
+    private UserMapper userMapper;
 
     @Override
     public UserDTO addNewUser(UserDTO userDTO) {

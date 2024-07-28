@@ -1,4 +1,4 @@
-package task.task;
+package task.task.IntegrationTesting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -19,11 +19,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import task.task.Controller.UserTypeController;
 import task.task.DTO.UserTypeDTO;
-import task.task.Entity.UserType;
 import task.task.Service.UserTypeService;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;

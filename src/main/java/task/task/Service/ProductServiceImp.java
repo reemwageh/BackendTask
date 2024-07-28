@@ -16,7 +16,7 @@ public class ProductServiceImp implements ProductService {
     @Autowired
     ProductRepository productRepository;
     @Autowired
-    ProductMapper productMapper; // Use MapStruct mapper
+    ProductMapper productMapper;
 
     @Override
     public ProductDTO createNewProduct(ProductDTO productDTO) {
@@ -29,11 +29,6 @@ public class ProductServiceImp implements ProductService {
     public List<ProductDTO> fetchAllProducts() {
         return productMapper.productsToProductDTOs(productRepository.findAll());
     }
-
-//    @Override
-//    public List<ProductDTO> getProductsByCategory(String category) {
-//        return productMapper.productsToProductDTOs(productRepository.findByCategory(category));
-//    }
 
     @Override
     public Optional<ProductDTO> getProductById(int productId) {

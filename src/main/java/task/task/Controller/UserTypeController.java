@@ -31,7 +31,6 @@ public class UserTypeController {
         return userTypeService.createUserType(userTypeDTO);
     }
 
-
     @Operation(
             description = "Get endpoint for All UserType",
             summary = "This endpoint is used to get all UserType stored in db"

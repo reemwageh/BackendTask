@@ -16,7 +16,6 @@ public interface ProductService {
 
     public ProductDTO updateProduct(int productId, ProductDTO productDTO);
 
-//    public List<ProductDTO> getProductsByCategory(String category);
 
     boolean deleteProduct(int productId);
 
